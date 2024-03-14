@@ -20,19 +20,44 @@
 
 <body>
 
-    <canvas id="glcanvas"></canvas>
+<canvas id="glcanvas"></canvas>
+<script id="vcode" type="x-shader/x-vertex"># version 300 es
+in vec4 aVertexPosition;
+in vec2 aTextureCoord;
 
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
-        integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
-        crossorigin="anonymous"
-        defer>
-    </script>
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
 
-    <script
-        src="webgl-demo.js"
-        type="module">
-    </script>
+out vec2 vTextureCoord;
+
+void main(void) {
+    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+    vTextureCoord = aTextureCoord;
+}
+</script>
+    
+<script id="fcode" type="x-shader/x-fragment" ># version 300 es
+in highp vec2 vTextureCoord;
+
+uniform sampler2D uSampler;
+out highp vec4 fragColor;
+
+void main(void) {
+    fragColor = texture(uSampler, vTextureCoord);
+}
+</script>    
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
+    integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
+    crossorigin="anonymous"
+    defer>
+</script>
+
+<script
+    src="webgl-demo.js"
+    type="module">
+</script>
 
 </body>
 
